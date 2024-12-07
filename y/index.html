@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIS-UA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>University of Antique - Main Campus</h1>
+        </header>
+        <div class="login-container">
+            <div class="login-box">
+                <div class="logo-section">
+                    <img src="images/preview.png" alt="University of Antique Logo" class="ua-logo">
+                </div>
+                <div class="form-section">
+                    <form id="login-form">
+                        <div class="input-container">
+                            <input type="email" id="username" placeholder="Email" required>
+                            <input type="password" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="button-container">
+                            <button type="submit" id="submit" class="action-button">Login</button>
+                            <button type="button" id="cancel" class="action-button">Cancel</button>
+                        </div>
+                        <div id="error-message" style="display:none; color: red;"></div>
+                         
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-container" style="display: none;">
+            <div class="chat-log" id="chatbox">
+                <div class="chat-message bot-message">
+                    <p>Hi, What can I help you with?</p>
+                    <span class="message-timestamp">10:00 AM</span>
+                </div>
+            </div>
+            <form id="chat-form">
+                <input type="text" id="input" placeholder="Type a message..." required>
+                <button type="submit" class="action-button">Send</button>
+            </form>
+            <button id="logoutButton" class="action-button">Logout</button>
+            
+            <!-- Dark Mode Toggle Switch -->
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation">
+                        <path fill="none" d="m4 16.5 8 8 16-16"></path>
+                    </svg>
+                </span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+      // Correct Firebase imports from CDN
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+      import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+      import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+
+      // Your Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCcD0Jex1VBVf5Ro6NJ1WqzQpFqg6bg5Q8",
+        authDomain: "generative-info-system.firebaseapp.com",
+        projectId: "generative-info-system",
+        storageBucket: "generative-info-system.firebasestorage.app",
+        messagingSenderId: "156890790642",
+        appId: "1:156890790642:web:9486ede5d79a2a9e252e6b",
+        measurementId: "G-J5QCS3XZ21"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // You can now use auth and db services here for login, firestore, etc.
+    </script>
+
+    <!-- Your Custom Script -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
