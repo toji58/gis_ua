@@ -12,6 +12,11 @@ const chatContainer = document.querySelector('.chat-container');
 const loginContainer = document.querySelector('.login-container');
 const errorMessage = document.getElementById('error-message');
 
+const isChatPage = document.getElementById("chatPage") !== null;
+// Get the settings button and sidebar elements
+const settingsButton = document.getElementById("settingsButton");
+const settingsSidebar = document.getElementById("settingsSidebar");
+
 // Firebase configuration and initialization
 const firebaseConfig = {
     apiKey: "AIzaSyCcD0Jex1VBVf5Ro6NJ1WqzQpFqg6bg5Q8",
@@ -22,6 +27,11 @@ const firebaseConfig = {
     appId: "1:156890790642:web:9486ede5d79a2a9e252e6b",
     measurementId: "G-J5QCS3XZ21"
 };
+// Toggle settings sidebar visibility
+document.getElementById('settingsButton').addEventListener('click', function() {
+    const sidebar = document.getElementById('settingsSidebar');
+    sidebar.classList.toggle('open');
+});
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig); 
@@ -255,14 +265,20 @@ logoutButton.addEventListener('click', function () {
 
 // Dark Mode Functionality
 const darkModeToggle = document.getElementById('darkModeToggle');
+
+// Check if dark mode is set in localStorage on page load
+if (localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark-mode');
+}
+
+// Add event listener for dark mode toggle
 darkModeToggle.addEventListener('click', function () {
-    document.body.classList.toggle('dark-mode');
-    const app = document.querySelector('.app');
-    app.classList.toggle('dark-mode');
+    document.body.classList.toggle('dark-mode'); // Toggle dark mode for body
 
     const chatLog = document.querySelector('.chat-log');
     const messages = document.querySelectorAll('.chat-message');
-
+    
+    // Change styles based on dark mode toggle
     if (document.body.classList.contains('dark-mode')) {
         chatLog.style.backgroundColor = '#121212';
         messages.forEach(message => {
@@ -276,6 +292,8 @@ darkModeToggle.addEventListener('click', function () {
         logoutButton.style.backgroundColor = '#ff4d4d';
         logoutButton.style.color = 'white';
 
+        // Save dark mode preference in localStorage
+        localStorage.setItem('darkMode', 'enabled');
     } else {
         chatLog.style.backgroundColor = 'white';
         messages.forEach(message => {
@@ -288,5 +306,8 @@ darkModeToggle.addEventListener('click', function () {
 
         logoutButton.style.backgroundColor = '#FF0000';
         logoutButton.style.color = 'white';
+
+        // Save light mode preference in localStorage
+        localStorage.setItem('darkMode', 'disabled');
     }
 });

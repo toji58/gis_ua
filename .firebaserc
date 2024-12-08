@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "generative-info-system"
-  }
+    "default": "generative-info-system",
+    "generative-info-system": "generative-info-system"
+  },
+  "targets": {},
+  "etags": {}
 }

@@ -19,49 +19,95 @@ html, body {
   align-items: center;               /* Centers content vertically */
   height: 100vh;                     /* Full viewport height */
   width: 100%;
-  padding: 20px;
+  padding: 0px;
   font-family: Arial, sans-serif;
-  border-radius: 15px;
+  border-radius: 0px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   flex-direction: column;            /* Stacks child elements vertically */
   box-sizing: border-box;            /* Ensures padding doesn't overflow the container */
   overflow: hidden;                  /* Prevent scrolling */
 }
 
-/* Ensure the login container has proper padding and space */
 .login-container {
   background: url("images/benz-l.jpeg") no-repeat center center fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%; /* Full width */
-  height: 100vh; /* Full height */
+  background-size: cover; /* Can change to 'contain' for full visibility */
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100%;
   margin: 0;
-  padding: 0 20px; /* Padding for mobile responsiveness */
+  padding: 0 20px;
   border-radius: 0 0 15px 15px;
   box-sizing: border-box;
-  overflow: hidden; /* Prevent scrolling */
+  overflow: hidden;
 }
 
 /* Header Styles */
 header {
   background-color: #b00a0a; /* Red background */
   color: #FFFFFF; /* White text */
-  padding: 2px 10px; /* Even smaller padding */
+  padding: -10px -20px; /* Even smaller padding */
   margin: 0; /* Remove margin */
-  width: 100%; /* Full width */
+  width: 110%; /* Full width */
   box-sizing: border-box; /* Include padding in width */
   text-align: center;
-  border-radius: 10px 10px 0 0; /* Smaller rounded corners */
+  border-radius: 0 0 0 0; /* Smaller rounded corners */
   animation: fadeIn 3s ease-in-out;
-  font-family: 'Roboto', sans-serif; /* Clean font */
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
   position: relative; /* Ensure it stays in place */
-  top: 0;
+  top: 20;
   left: 0;
   font-size: 14px; /* Smaller font size */
   letter-spacing: 1px; /* Slightly spaced letters for readability */
+}
+
+header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Chat Header Styling */
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  background-color: #931616;
+  color: white;
+  padding: 0 20px; /* Added padding to give space on the sides */
+  height: 80px; /* Increased height to make the header bigger */
+  width: 100%; /* Ensure the header spans the full width */
+  position: fixed; /* Fix the header at the top */
+  top: 0; /* Align the header to the top of the screen */
+  left: 0; /* Align the header to the left edge */
+  z-index: 1000; /* Ensure the header stays on top */
+}
+
+/* Logo Section Styling */
+.chat-header .logo-section img {
+  width: 75px; /* Resize the logo to a slightly larger size */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 5px; /* Space between logo and title */
+  margin-left: -10px;
+}
+
+/* Header Text Styling */
+.chat-header h1 {
+  font-size: 24px; /* Adjusted font size */
+  margin-right: 120px;
+  margin-top: 10px;
+}
+
+.chat-header h2 {
+  font-size: 15px; /* Adjust font size for the subtitle */
+  margin-right: 145px;
+  font-weight: normal;
+}
+
+/* Chat Container Styling */
+.chat-container {
+  margin-top: 80px; /* Ensure the chat container starts below the header */
+  padding: 20px;
 }
 
 /* Glassy Login Box with Transparency and Blur Effect */
@@ -160,27 +206,28 @@ h2 {
 
 }
 #cancel {
-  background-color: #a4a2a2;
+  background-color: #888080;
   color: #000;
 }
 
 /* Cancel Button Hover */
 #cancel:hover {
-  background-color: #7a7a7a;
+  background-color: #575555;
   transform: scale(1.05); /* Prevent any size change for the cancel button */
 }
 
-/* Chat Form Styles */
+/* General Chat Container for All Screens */
 .chat-container {
-  padding: 17px;
-  height: fit-content;
-  display: block;
-  flex-grow: 1;
-  overflow: hidden;
-  width: 100%;
-  margin-right: 10px;
-  background: inherit; /* Inherit background color from the app */
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  width: 100.5%;
+  background: inherit; /* Match the app's background color */
+  padding: 100px 30px 100px 100px; /* Adjusted padding to remove extra space at the bottom */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent content overflow */
 }
+
 
 .chat-log {
   padding: 10px;
@@ -196,8 +243,8 @@ h2 {
 }
 
 .chat-message {
-  margin-bottom: 20px;
-  padding: 15px;
+  margin-bottom: 10px;
+  padding: px;
   border-radius: 15px;
   display: inline-block;
   color: inherit;
@@ -254,7 +301,7 @@ form {
 }
 
 form input[type="text"] {
-  flex-grow: 1;
+  flex-grow: 3;
   padding: 10px;
   border: 1px solid #DDDDDD;
   border-radius: 10px;
@@ -318,94 +365,112 @@ form button[type="submit"]:hover {
   transform: scale(1.05); /* Slightly bigger on hover */
 }
 
-/* Dark Mode Specific Styles */
-.dark-mode #logoutButton {
-  background-color: #ff4d4d; /* Darker red background in dark mode */
-  color: white; /* White text */
+footer {
+  margin-top: auto;
 }
 
-.dark-mode #logoutButton:hover {
-  background-color: #ff3333; /* Even darker red on hover in dark mode */
+/* Sidebar Styling */
+.settings-sidebar {
+  position: fixed;
+  top: 60px; /* Give space for the header */
+  right: -120px; /* Initially hidden to the right */
+  width: 120px; /* Sidebar width reduced by approximately 1.5 inches */
+  height: calc(100% - 60px); /* Adjust height to account for the header */
+  background-color: #333;
+  color: white;
+  transition: right 0.3s ease;
+  padding: 10px; /* Reduced padding further */
+  z-index: 10; /* Ensure sidebar is above other content */
 }
 
-/* Toggle Switch Styles */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 35px;
-  margin-top: 10px;
-  margin-bottom: 15px;
-  padding: 7px 15px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
+/* Display Sidebar when it's active */
+.settings-sidebar.open {
   right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
+/* Bar Styling for Hamburger Menu */
+.settings-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto; /* Push the button to the right */
 }
 
-input:checked + .slider {
-  background-color: #FF0000;
+.settings-button .bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  margin: 2px auto;
+  background-color: rgb(232, 232, 232);
 }
 
-input:checked + .slider:before {
-  transform: translateX(26px);
+/* Styling for Switch (Dark Mode Toggle) */
+.switch {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  z-index: 20; /* Ensure the dark mode switch is above other elements */
 }
 
-/* Dark Mode */
-.dark-mode {
-  background-color: #121212;
+.switch label {
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+/* Chat Container Styling */
+.chat-container {
+  position: relative;
+}
+
+/* Ensure Logout Button is within the Sidebar */
+.settings-sidebar .settings-button {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  background-color: #444;
+  border: none;
+  margin-bottom: 10px;
   color: white;
 }
 
-.app.dark-mode {
-  background: #1e1e1e;
-}
-
-.chat-log.dark-mode {
-  background-color: #333;
-  border: 1px solid #444;
-}
-
-.chat-message.dark-mode {
+/* Style for Logout Button */
+#logoutButton {
+  width: 100%;
+  padding: 10px;
   background-color: #444;
+  color: white;
+  border: none;
+  text-align: center; /* Center the logout text */
+  cursor: pointer;
+  margin-top: 20px; /* Space between header and logout button */
 }
 
-.user-message.dark-mode {
-  background-color: #555;
+#logoutButton:hover {
+  background-color: #555; /* Darken the button on hover */
 }
 
-.bot-message.dark-mode {
-  background-color: #555;
+/* Mobile-specific styles for the sidebar */
+@media screen and (max-width: 600px) {
+  #settingsButton {
+    top: 15px;
+    left: 15px;
+    font-size: 18px;
+  }
+
+  .settings-sidebar {
+    width: 200px;
+  }
 }
 
-footer {
-  margin-top: auto;
+/* Ensure the settings sidebar only appears in the chat form */
+#chatPage #settingsButton,
+#chatPage .settings-sidebar {
+  display: block; /* Display settings button and sidebar in chat page */
+}
+
+#loginPage #settingsButton,
+#loginPage .settings-sidebar {
+  display: none; /* Hide settings button and sidebar in login page */
 }
 
 @media screen and (max-width: 600px) {
@@ -489,7 +554,7 @@ footer {
 
   /* Header */
   header {
-    font-size: 12px;
+    font-size: 10px;
     padding: 5px 10px;
   }
 
@@ -505,3 +570,41 @@ footer {
     margin-top: 8px;         /* Push buttons to the bottom of the screen */
   }
 }
+ /* Chat Container */
+ .chat-container {
+  height: calc(100vh - env(safe-area-inset-bottom)); /* Adjust height for mobile */
+  overflow-y: auto; /* Allow scrolling for content */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensure space for buttons at the bottom */
+  padding: 10px;
+}
+
+.chat-log {
+  max-height: calc(75vh - 50px); /* Fit chat log properly */
+  overflow-y: auto;
+  padding-bottom: 60px; /* Space for buttons */
+}
+
+.chat-message {
+  max-width: 80%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+}
+/* Tablet-specific styles for devices between 600px and 900px */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  .login-box {
+    width: 70%;
+    max-width: 400px;
+  }
+
+  #submit,
+  #cancel {
+    font-size: 16px;
+    width: 70%;
+  }
+}
+
+

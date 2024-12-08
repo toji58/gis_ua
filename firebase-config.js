@@ -8,7 +8,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCcD0Jex1VBVf5Ro6NJ1WqzQpFqg6bg5Q8",
   authDomain: "generative-info-system.firebaseapp.com",
   projectId: "generative-info-system",
-  storageBucket: "generative-info-system.firebasestorage.app",
+  storageBucket: "generative-info-system.appspot.com",  // Corrected storageBucket URL
   messagingSenderId: "156890790642",
   appId: "1:156890790642:web:9486ede5d79a2a9e252e6b",
   measurementId: "G-J5QCS3XZ21"
@@ -23,12 +23,17 @@ const auth = getAuth(app);
 
 // Function to sign in using email and password
 const signIn = (email, password) => {
+  if (!email || !password) {
+    alert("Please provide both email and password.");
+    return;
+  }
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Logged in successfully
       const user = userCredential.user;
       console.log("Logged in as:", user);
-      // Proceed to next step, for example, redirect to dashboard
+      // Redirect to dashboard after successful login
+      window.location.href = "/dashboard";  // Change this to your desired path
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -37,3 +42,13 @@ const signIn = (email, password) => {
       alert("Error: " + errorMessage); // Show error to the user
     });
 };
+
+// Listen to authentication state changes
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    console.log("User is signed in:", user);
+    // You can redirect to the dashboard or home page here
+  } else {
+    console.log("User is signed out");
+  }
+});
