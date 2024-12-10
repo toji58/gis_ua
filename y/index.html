@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>GIS-UA</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app">
         <!-- Login Page -->
-        <div class="login-container">
+       <div class="login-container">
             <div class="login-box">
                 <div class="logo-section">
                     <img src="images/preview.png" alt="University of Antique Logo" class="ua-logo">
@@ -28,7 +28,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> 
 
         <!-- Chat Page (Hidden initially) -->
         <div class="chat-container" style="display: none;">
@@ -41,8 +41,8 @@
                     <h1>University of Antique</h1>
                     <h2>Generative Information System</h2>
                 </div>
-                <!-- Hamburger Menu (3 lines) for Settings -->
-                <button id="settingsButton" class="settings-button">
+                <!-- Hamburger Menu -->
+                <button id="menuButton" class="menu-button">
                     <span class="bar"></span>
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -50,10 +50,10 @@
             </header>
 
             <!-- Sidebar -->
-            <div id="settingsSidebar" class="settings-sidebar">
-                <!-- Settings content (logout only, removed dark mode toggle) -->
-                <div class="settings-content">
-                    <button id="logoutButton" class="settings-button">Logout</button>
+            <div id="menuSidebar" class="menu-sidebar">
+                <div class="menu-content">
+                    <button id="settingsButton" class="settings-button settings">Settings</button>
+                    <button id="logoutButton" class="settings-button logout">Logout</button>  
                 </div>
             </div>
 
@@ -64,14 +64,16 @@
                     <span class="message-timestamp">10:00 AM</span>
                 </div>
             </div>
-
-            <!-- Chat Form -->
-            <form id="chat-form">
-                <input type="text" id="input" placeholder="Type a message..." required>
-                <button type="submit" class="action-button">Send</button>
-            </form>
-        </div>
+          <!-- Chat Form -->
+<form id="chat-form">
+    <div class="textarea-container">
+        <textarea id="input" placeholder="Type a message..." required></textarea>
+        <button type="submit" class="chat-send-button">
+            <div class="send-icon"></div>
+        </button>
     </div>
+</form>
+
 
     <!-- Firebase Scripts -->
     <script type="module">
@@ -80,7 +82,7 @@
         import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
         import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
-        // Your Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCcD0Jex1VBVf5Ro6NJ1WqzQpFqg6bg5Q8",
             authDomain: "generative-info-system.firebaseapp.com",
@@ -97,7 +99,6 @@
         const db = getFirestore(app);
     </script>
 
-    <!-- Your Custom Script -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

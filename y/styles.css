@@ -1,610 +1,548 @@
-/* Reset Styles */
 * {
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  width: 100%; /* Adjusted to be responsive */
-  margin: 0;
-  display: block; /* Ensures no flexbox layout */
-  background: #f8cece;
-  overflow: hidden;     /* Prevent scrollbars on body */
-}
-
-/* General layout for the app */
-.app {
-  display: flex;
-  justify-content: center;           /* Centers content horizontally */
-  align-items: center;               /* Centers content vertically */
-  height: 100vh;                     /* Full viewport height */
-  width: 100%;
-  padding: 0px;
-  font-family: Arial, sans-serif;
-  border-radius: 0px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  flex-direction: column;            /* Stacks child elements vertically */
-  box-sizing: border-box;            /* Ensures padding doesn't overflow the container */
-  overflow: hidden;                  /* Prevent scrolling */
-}
-
-.login-container {
-  background: url("images/benz-l.jpeg") no-repeat center center fixed;
-  background-size: cover; /* Can change to 'contain' for full visibility */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0 20px;
-  border-radius: 0 0 15px 15px;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* Header Styles */
-header {
-  background-color: #b00a0a; /* Red background */
-  color: #FFFFFF; /* White text */
-  padding: -10px -20px; /* Even smaller padding */
-  margin: 0; /* Remove margin */
-  width: 110%; /* Full width */
-  box-sizing: border-box; /* Include padding in width */
-  text-align: center;
-  border-radius: 0 0 0 0; /* Smaller rounded corners */
-  animation: fadeIn 3s ease-in-out;
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  position: relative; /* Ensure it stays in place */
-  top: 20;
-  left: 0;
-  font-size: 14px; /* Smaller font size */
-  letter-spacing: 1px; /* Slightly spaced letters for readability */
-}
-
-header h1 {
-  font-size: 24px;
-  margin: 0;
-}
-
-/* Chat Header Styling */
-.chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  background-color: #931616;
-  color: white;
-  padding: 0 20px; /* Added padding to give space on the sides */
-  height: 80px; /* Increased height to make the header bigger */
-  width: 100%; /* Ensure the header spans the full width */
-  position: fixed; /* Fix the header at the top */
-  top: 0; /* Align the header to the top of the screen */
-  left: 0; /* Align the header to the left edge */
-  z-index: 1000; /* Ensure the header stays on top */
-}
-
-/* Logo Section Styling */
-.chat-header .logo-section img {
-  width: 75px; /* Resize the logo to a slightly larger size */
-  height: auto; /* Maintain aspect ratio */
-  margin-right: 5px; /* Space between logo and title */
-  margin-left: -10px;
-}
-
-/* Header Text Styling */
-.chat-header h1 {
-  font-size: 24px; /* Adjusted font size */
-  margin-right: 120px;
-  margin-top: 10px;
-}
-
-.chat-header h2 {
-  font-size: 15px; /* Adjust font size for the subtitle */
-  margin-right: 145px;
-  font-weight: normal;
-}
-
-/* Chat Container Styling */
-.chat-container {
-  margin-top: 80px; /* Ensure the chat container starts below the header */
-  padding: 20px;
-}
-
-/* Glassy Login Box with Transparency and Blur Effect */
-.login-box {
-  display: flex;
-  background-color: rgba(255, 255, 255, 0.3); /* White with transparency */
-  border-radius: 10px; /* Slightly rounded corners */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 500px; /* Rectangular shape with reasonable width */
-  padding: 20px;
-  align-items: center;
-  backdrop-filter: blur(10px); /* Adds blur effect to the background */
-  -webkit-backdrop-filter: blur(10px); /* For Safari */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border with transparency */
-  box-sizing: border-box;
-  margin: auto; /* Center the login box */
-}
-/* Logo Section */
-.logo-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 10px;
-}
-
-.ua-logo {
-  max-width: 150px;
-  height: auto;
-  margin-left: 5px;
-}
-
-/* Form Section */
-.form-section {
-  flex: 1;
-  text-align: left;
-}
-
-h2 {
-  margin-top: 0;
-}
-
-/* Input Container */
-.input-container {
-  display: flex;
-  flex-direction: column;
- 
-}
-
-/* Input Fields */
-#login-form input[type="text"],
-#login-form input[type="password"],
-#login-form input[type="email"] {
-  width: 150%; /* Ensure inputs stretch across the container */
-  padding: 10px 20px; /* Slightly larger padding for better usability */
-  border: 1px solid #ff0000;
-  border-radius: 8px; /* Rounded corners for inputs */
-  font-size: 15px;
-  margin-bottom: 10px;
-  margin-left: 0px;
-  box-sizing: border-box; /* Ensures padding doesn't affect width */
-}
-
-/* Button Container */
-.button-container {
-  display: flex;
-  flex-direction: column;  /* Stack buttons vertically */
-  align-items: center;     /* Center buttons horizontally */
-  gap: 10px;               /* Add space between buttons */
-  width: 100%;
-  margin-top: 5px;         /* Adjust margin for spacing */
-}
-
-/* Button Styles */
-#submit, #cancel {
-  background-color: #FF0000;
-  color: #FFFFFF;
-  padding: 10px 20px; /* Slightly larger padding for better usability */
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;         /* Adjust font size */
-  width: 70px;            /* Set a more reasonable fixed width */
-  text-align: center;      /* Center text inside the buttons */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition */
-  margin-left: 65px;
-  justify-content: center; /* Centers the text horizontally */
-  align-items: center;     /* Centers the text vertically */
-  display: flex;
-}
-
-/* Submit (Login) Button Hover */
-#submit:hover {
-  background-color: #CC0000;
-  transform: scale(1.05); /* Login button grows slightly when hovered */
-
-}
-#cancel {
-  background-color: #888080;
-  color: #000;
-}
-
-/* Cancel Button Hover */
-#cancel:hover {
-  background-color: #575555;
-  transform: scale(1.05); /* Prevent any size change for the cancel button */
-}
-
-/* General Chat Container for All Screens */
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Full viewport height */
-  width: 100.5%;
-  background: inherit; /* Match the app's background color */
-  padding: 100px 30px 100px 100px; /* Adjusted padding to remove extra space at the bottom */
-  box-sizing: border-box;
-  overflow: hidden; /* Prevent content overflow */
-}
-
-
-.chat-log {
-  padding: 10px;
-  border: 1px solid #DDDDDD;
-  height: calc(100% - 80px);
-  max-height: 500px;
-  overflow-y: auto;
-  border-radius: 10px;
-  background-color: #FFF;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.chat-message {
-  margin-bottom: 10px;
-  padding: px;
-  border-radius: 15px;
-  display: inline-block;
-  color: inherit;
-  word-wrap: break-word;
-  position: relative;
-  width: fit-content;
-  max-width: 50%;
-}
-
-.user-message {
-  background-color: #FFD6D6;
-  align-self: flex-end;
-  text-align: right;
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.bot-message {
-  background-color: #FFD6D6;
-  align-self: flex-start;
-  text-align: left;
-  margin-right: auto;
-  margin-left: 0;
-}
-
-.chat-message p {
-  margin: 0;
-  font-size: 16px;
-  color: inherit;
-}
-
-.message-timestamp {
-  font-size: 10px;
-  display: block;
-  color: #999;
-  position: absolute;
-  bottom: -15px;
-  right: 5px;
-}
-
-.user-message .message-timestamp {
-  right: 5px;
-}
-
-.bot-message .message-timestamp {
-  left: 5px;
-}
-
-/* Form for sending messages */
-form {
-  margin-top: 10px;
-  display: flex;
-  width: 100%;
-}
-
-form input[type="text"] {
-  flex-grow: 3;
-  padding: 10px;
-  border: 1px solid #DDDDDD;
-  border-radius: 10px;
-  font-size: 16px;
-}
-
-/* Chatbox Send Button - Ensure this is independent */
-form button[type="submit"] {
-  margin-left: 10px;
-  background-color: #FF0000;
-  color: #FFFFFF;
-  padding: 10px 20px;  /* Larger padding */
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 16px;  /* Keep the chat button larger */
-}
-
-/* Ensure Chatbox button hover effect is kept */
-form button[type="submit"]:hover {
-  background-color: #CC0000;
-}
-
-/* Error Message */
-#error-message {
-  color: #FF0000;
-  display: none;
-  margin-top: 10px;
-}
-
-/* Back Button */
-#back-btn {
-  background-color: #FF0000;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 10px;
-}
-
-#back-btn:hover {
-  background-color: #CC0000;
-}
-
-/* Default Logout Button Styles (Light Mode) */
-#logoutButton {
-  background-color: #FF0000; /* Red background */
-  color: white; /* White text */
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#logoutButton:hover {
-  background-color: #cc0000; /* Darker red when hovered */
-  transform: scale(1.05); /* Slightly bigger on hover */
-}
-
-footer {
-  margin-top: auto;
-}
-
-/* Sidebar Styling */
-.settings-sidebar {
-  position: fixed;
-  top: 60px; /* Give space for the header */
-  right: -120px; /* Initially hidden to the right */
-  width: 120px; /* Sidebar width reduced by approximately 1.5 inches */
-  height: calc(100% - 60px); /* Adjust height to account for the header */
-  background-color: #333;
-  color: white;
-  transition: right 0.3s ease;
-  padding: 10px; /* Reduced padding further */
-  z-index: 10; /* Ensure sidebar is above other content */
-}
-
-/* Display Sidebar when it's active */
-.settings-sidebar.open {
-  right: 0;
-}
-
-/* Bar Styling for Hamburger Menu */
-.settings-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: auto; /* Push the button to the right */
-}
-
-.settings-button .bar {
-  display: block;
-  width: 20px;
-  height: 2px;
-  margin: 2px auto;
-  background-color: rgb(232, 232, 232);
-}
-
-/* Styling for Switch (Dark Mode Toggle) */
-.switch {
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
-  z-index: 20; /* Ensure the dark mode switch is above other elements */
-}
-
-.switch label {
-  margin-right: 10px;
-  font-size: 14px;
-}
-
-/* Chat Container Styling */
-.chat-container {
-  position: relative;
-}
-
-/* Ensure Logout Button is within the Sidebar */
-.settings-sidebar .settings-button {
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  background-color: #444;
-  border: none;
-  margin-bottom: 10px;
-  color: white;
-}
-
-/* Style for Logout Button */
-#logoutButton {
-  width: 100%;
-  padding: 10px;
-  background-color: #444;
-  color: white;
-  border: none;
-  text-align: center; /* Center the logout text */
-  cursor: pointer;
-  margin-top: 20px; /* Space between header and logout button */
-}
-
-#logoutButton:hover {
-  background-color: #555; /* Darken the button on hover */
-}
-
-/* Mobile-specific styles for the sidebar */
-@media screen and (max-width: 600px) {
-  #settingsButton {
-    top: 15px;
-    left: 15px;
-    font-size: 18px;
+  box-sizing : border-box;
   }
-
-  .settings-sidebar {
-    width: 200px;
+  html, body {
+  height : 100%;
+  width : 100%;
+  margin : 0;
+  display : block;
+  background : #f6c2c2;
+  overflow : hidden;
   }
-}
-
-/* Ensure the settings sidebar only appears in the chat form */
-#chatPage #settingsButton,
-#chatPage .settings-sidebar {
-  display: block; /* Display settings button and sidebar in chat page */
-}
-
-#loginPage #settingsButton,
-#loginPage .settings-sidebar {
-  display: none; /* Hide settings button and sidebar in login page */
-}
-
-@media screen and (max-width: 600px) {
-  /* Mobile-specific styles */
-
-  /* Ensure the login container takes full height and stacks content */
+  .app {
+  display : flex;
+  justify-content : center;
+  align-items : center;
+  height : 100vh;
+  width : 100%;
+  padding : 0;
+  font-family : Arial, sans-serif;
+  border-radius : 0;
+  box-shadow : 0 0 15px rgb(0, 0, 0, 0.2);
+  flex-direction : column;
+  box-sizing : border-box;
+  overflow : hidden;
+  }
+  
   .login-container {
-    display: flex;
-    flex-direction: column;    /* Stack elements vertically */
-    justify-content: center;   /* Vertically center the content */
-    align-items: center;       /* Horizontally center the content */
-    height: 100vh;             /* Full height of the viewport */
-    padding: 15px;             /* Padding inside the container */
-    box-sizing: border-box;    /* Ensure padding is inside the element */
+  background : url("images/benz-l.jpeg") center center no-repeat fixed;
+  background-size : cover;
+  display : flex;
+  justify-content : center;
+  align-items : center;
+  height : 100vh;
+  width : 100%;
+  margin : 0;
+  padding : 0 20px;
+  border-radius : 0 0 15px 15px;
+  box-sizing : border-box;
+  overflow : hidden;
   }
-
-  /* Login Box */
-  .login-box {
-    width: 90%;                /* Adjust width for smaller screens */
-    max-width: 350px;          /* Max width ensures it doesn't stretch too wide */
-    padding: 15px;             /* Padding for spacing inside the box */
-    margin: 0 auto;            /* Center the box horizontally */
-    box-sizing: border-box;    /* Ensures padding and border are included in width */
-    max-height: 70%;           /* Limit the height of the login box */
-    overflow-y: auto;          /* Allow scrolling if the content overflows */
-    text-align: center;        /* Center the text inside the box */
-  }
-
-  /* Input Fields */
-  #login-form input[type="text"],
-  #login-form input[type="password"],
-  #login-form input[type="email"] {
-    width: 100%;              /* Adjust to full width on mobile */
-    padding: 12px 15px;       /* Increase padding for easier touch interaction */
-    font-size: 16px;          /* Increase font size for readability */
-    margin-bottom: 10px;      /* Space between input fields */
-    border-radius: 8px;       /* Round the corners */
-    border: 1px solid #ccc;   /* Light border for inputs */
-  }
-
-  /* Adjust Login Button */
-  #submit {
-    padding: 10px 20px;       /* Smaller padding for buttons on mobile */
-    font-size: 14px;          /* Smaller font size for buttons */
-    width: 80%;               /* Let the buttons take up full width on mobile */
-    margin-left: 0;           /* Remove left margin on mobile */
-    margin-bottom: 10px;      /* Reduced spacing between buttons */
-    border-radius: 8px;       /* Round the corners */
-    border: none;             /* Remove border */
-    background-color: #FF0000; /* Button color */
-    color: white;             /* Button text color */
-    cursor: pointer;         /* Pointer on hover */
-  }
-
-  /* Adjust Cancel Button */
-  #cancel {
-    padding: 10px 20px;       /* Smaller padding for buttons on mobile */
-    font-size: 14px;          /* Smaller font size for buttons */
-    width: 80%;               /* Let the buttons take up full width on mobile */
-    margin-left: 0;           /* Remove left margin on mobile */
-    margin-bottom: 10px;      /* Reduced spacing between buttons */
-    border-radius: 8px;       /* Round the corners */
-    border: none;             /* Remove border */
-    background-color: #b3b3b3;   /* Same color as desktop Cancel button */
-    color: black;             /* Button text color */
-    cursor: pointer;         /* Pointer on hover */
-  }
-
-  /* Hover effect for buttons */
-  #submit:hover, #cancel:hover {
-    transform: scale(1.05);
-  }
-
-  /* Ensure logo is resized for mobile */
-  .ua-logo {
-    max-width: 100%;         /* Adjust logo size */
-    max-height: 60px;         /* Prevent logo from becoming too tall */
-    margin-bottom: 5px;      /* Add space below the logo */
-    margin-left: 0px;
-  }
-
-  /* Header */
+  
   header {
-    font-size: 10px;
-    padding: 5px 10px;
+  background-color : #b00a0a;
+  color : #FFFFFF;
+  margin : 0;
+  width : 110%;
+  box-sizing : border-box;
+  text-align : center;
+  border-radius : 0 0 0 0;
+  animation : fadeIn 3s ease-in-out;
+  font-family : 'Roboto', Helvetica, Arial, sans-serif;
+  position : relative;
+  left : 0;
+  font-size : 14px;
+  letter-spacing : 1px;
   }
-
-  /* Adjust font sizes for header and form */
-  h2 {
-    font-size: 36px;
-    line-height: 50px;        /* Reduce h2 font size */
+  header h1 {
+  font-size : 24px;
+  margin : 0;
   }
-
-  /* Button Container */
-  .button-container {
-    gap: 0px;                /* Reduced gap between buttons */
-    margin-top: 8px;         /* Push buttons to the bottom of the screen */
+  .chat-header {
+  display : flex;
+  align-items : center;
+  text-align : center;
+  justify-content : left;
+  background-color : #931616;
+  color : white;
+  padding : 0 20px;
+  height : 80px;
+  width : 100%;
+  position : fixed;
+  top : 0;
+  left : 0;
+  z-index : 1000;
+  letter-spacing : 1px;
+  font-size : 14px;
   }
-}
- /* Chat Container */
- .chat-container {
-  height: calc(100vh - env(safe-area-inset-bottom)); /* Adjust height for mobile */
-  overflow-y: auto; /* Allow scrolling for content */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Ensure space for buttons at the bottom */
-  padding: 10px;
-}
-
-.chat-log {
-  max-height: calc(75vh - 50px); /* Fit chat log properly */
-  overflow-y: auto;
-  padding-bottom: 60px; /* Space for buttons */
-}
-
-.chat-message {
-  max-width: 80%;
-  margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 8px;
-  background-color: #f1f1f1;
-}
-/* Tablet-specific styles for devices between 600px and 900px */
-@media screen and (min-width: 600px) and (max-width: 900px) {
+  .chat-header .logo-section img {
+  width : 75px;
+  height : auto;
+  margin-right : 5px;
+  margin-left : -10px;
+  }
+  .chat-header h1 {
+    font-size : 24px;
+    margin : 0;
+    margin-right: 30px;
+    
+  }
+  .chat-header h2 {
+    font-size : 12px;
+    margin : 0;
+    margin-right: 80px;
+    font-weight : normal;
+  }
+  .chat-container {
+  margin-top : 80px;
+  padding : 20px;
+  }
   .login-box {
-    width: 70%;
-    max-width: 400px;
+  display : flex;
+  background-color : rgb(255, 255, 255, 0.3);
+  border-radius : 10px;
+  box-shadow : 0 4px 6px rgb(0, 0, 0, 0.1);
+  width : 100%;
+  max-width : 500px;
+  padding : 20px;
+  align-items : center;
+  backdrop-filter : blur(10px);
+  border : rgb(255, 255, 255, 0.2) solid 1px;
+  box-sizing : border-box;
+  margin : auto;
   }
-
-  #submit,
+  .logo-section {
+  display : flex;
+  justify-content : center;
+  align-items : center;
+  padding-right : 10px;
+  }
+  .ua-logo {
+  max-width : 150px;
+  height : auto;
+  margin-left : 5px;
+  }
+  .form-section {
+  flex : 1;
+  text-align : left;
+  }
+  h2 {
+  margin-top : 0;
+  }
+  .input-container {
+  display : flex;
+  flex-direction : column;
+  }
+  #login-form input[type="text"], #login-form input[type="password"], #login-form input[type="email"] {
+  width : 150%;
+  padding : 10px 20px;
+  border : #ff0000 solid 1px;
+  border-radius : 8px;
+  font-size : 15px;
+  margin-bottom : 10px;
+  margin-left : 0;
+  box-sizing : border-box;
+  }
+  .button-container {
+  display : flex;
+  flex-direction : column;
+  align-items : center;
+  gap : 10px;
+  width : 100%;
+  margin-top : 5px;
+  }
+  #submit, #cancel {
+  background-color : #FF0000;
+  color : #FFFFFF;
+  padding : 10px 20px;
+  border : none;
+  border-radius : 8px;
+  cursor : pointer;
+  font-size : 13px;
+  width : 70px;
+  text-align : center;
+  transition : background-color 0.3s ease, transform 0.2s ease;
+  margin-left : 65px;
+  justify-content : center;
+  align-items : center;
+  display : flex;
+  }
+  #submit:hover {
+  background-color : #CC0000;
+  transform : scale(1.05);
+  }
   #cancel {
-    font-size: 16px;
-    width: 70%;
+  background-color : #888080;
+  color : #000;
   }
+  #cancel:hover {
+  background-color : #575555;
+  transform : scale(1.05);
+  }
+  .chat-container {
+  display : flex;
+  flex-direction : column;
+  height : 100vh;
+  width : 100%;
+  background : inherit;
+  padding : 20px 30px;
+  box-sizing : border-box;
+  overflow : visible;
+  }
+  .chat-log {
+  padding : 10px;
+  border : #DDDDDD solid 1px;
+  height : calc(100% - 80px);
+  max-height : 500px;
+  overflow-y : auto;
+  border-radius : 10px;
+  background-color : #FFF;
+  display : flex;
+  flex-direction : column;
+  align-items : flex-start;
+  }
+  .chat-message {
+  margin-bottom : 10px;
+  border-radius : 15px;
+  display : inline-block;
+  color : inherit;
+  overflow-wrap : break-word;
+  position : relative;
+  width : fit-content;
+  max-width : 50%;
+  }
+  .user-message {
+  background-color : #FFD6D6;
+  align-self : flex-end;
+  text-align : right;
+  margin-left : auto;
+  margin-right : 0;
+  }
+  .bot-message {
+  background-color : #FFD6D6;
+  align-self : flex-start;
+  text-align : left;
+  margin-right : auto;
+  margin-left : 0;
+  }
+  .chat-message p {
+  margin : 0;
+  font-size : 16px;
+  color : inherit;
+  }
+  .message-timestamp {
+  font-size : 10px;
+  display : block;
+  color : #999;
+  position : absolute;
+  bottom : -15px;
+  right : 5px;
+  }
+  .user-message .message-timestamp {
+  right : 10px;
+  }
+  .bot-message .message-timestamp {
+  left : 10px;
+  }
+  form {
+  margin-top : 20px;
+  display : flex;
+  width : 100%;
+  }
+/* Container for textarea and button */
+.textarea-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
 }
 
+/* Adjust textarea to leave space for button */
+form textarea {
+  flex-grow: 1;
+  padding: 8px 10px;
+  border: #DDDDDD solid 1px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  resize: none;
+  overflow-wrap: break-word;
+  height: 85px;
+  line-height: 1.4;
+  color: #333;
+  padding-right: 60px; /* Space for the button */
+}
 
+/* Style the send button */
+form .chat-send-button {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #931616; 
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for button */
+form .chat-send-button:hover {
+  background-color: #6B0000; /* Slightly darker red */
+}
+
+/* Arrow icon inside the button */
+form .chat-send-button .send-icon {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 15px solid white; /* White arrow pointing up */
+}
+
+/* Optional: Adjust arrow position slightly */
+form .chat-send-button .send-icon {
+  transform: translateY(-2px); /* Fine-tune vertical alignment */
+}
+
+  #back-btn {
+  background-color : #FF0000;
+  color : #FFFFFF;
+  padding : 10px 20px;
+  border : none;
+  border-radius : 10px;
+  cursor : pointer;
+  transition : background-color 0.3s ease;
+  margin-bottom : 10px;
+  }
+  #back-btn:hover {
+  background-color : #CC0000;
+  }
+  footer {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .menu-sidebar {
+  position : fixed;
+  top : 60px;
+  right : -160px;
+  width : 130px;
+  height : calc(100% - 60px);
+  background-color : #931616;
+  color : white;
+  transition : right 0.5s ease;
+  display : flex;
+  flex-direction : column;
+  justify-content : flex-start;
+  align-items : center;
+  z-index : 5;
+  padding : 10px;
+  }
+  .menu-sidebar.open {
+  right : 0;
+  }
+  .menu-button {
+  background : none;
+  border : none;
+  cursor : pointer;
+  position : fixed;
+  top : 20px;
+  right : 10px;
+  z-index : 10;
+  }
+  .menu-button .bar {
+  display : block;
+  width : 20px;
+  height : 2px;
+  margin : 4px auto;
+  background-color : rgb(255, 255, 255);
+  }
+  .menu-content {
+  flex-grow : 1;
+  display : flex;
+  flex-direction : column;
+  justify-content : flex-start;
+  gap : 20px;
+  width : 100%;
+  }
+  .menu-sidebar .logout {
+  position : relative;
+  bottom : 5px;
+  left : 50%;
+  transform : translateX(-50%);
+  width : 95%;
+  padding : 10px 20px;
+  background-color : #931616;
+  color : white;
+  border : none;
+  border-radius : 5px;
+  cursor : pointer;
+  transition : background-color 0.3s ease, transform 0.1s ease;
+  font-size : 14px;
+  text-align : center;
+  margin-top : auto;
+  margin-bottom : 5px;
+  }
+  .menu-sidebar .logout:hover {
+  background-color : #db3232;
+  transform : scale(1.03) translateX(-50%);
+  }
+  .menu-sidebar .settings {
+  position : absolute;
+  top : 30px;
+  left : 50%;
+  transform : translateX(-50%);
+  width : 80%;
+  padding : 10px 20px;
+  background-color :#931616;
+  color : white;
+  border : none;
+  border-radius : 5px;
+  cursor : pointer;
+  transition : background-color 0.3s ease, transform 0.1s ease;
+  font-size : 14px;
+  text-align : center;
+  }
+  .menu-sidebar .settings:hover {
+  background-color : #db3232;
+  transform : scale(1.03) translateX(-50%);
+  }
+  @media screen and (min-width: 600px) and (max-width: 1080px) {
+    #menuButton {
+    top : 10px;
+    bottom:auto;
+    margin-right : 23px;
+    font-size : 1px;
+    }
+    
+    .menu-sidebar {
+    width : 100px;
+    }
+    
+    }
+    #chatPage #menuButton, #chatPage .menu-sidebar {
+    display : block;
+    }
+    #loginPage #menuButton, #loginPage .menu-sidebar {
+    display : none;
+    }
+    @media screen and (max-width: 770px) {
+    .login-container {
+    display : flex;
+    flex-direction : column;
+    justify-content : center;
+    align-items : center;
+    height : 100vh;
+    padding : 15px 15px 25px 15px;
+    box-sizing : border-box;
+    }
+    .login-box {
+    width : 100%;
+    max-width : 350px;
+    padding : 5px;
+    margin : 0 auto;
+    box-sizing : border-box;
+    max-height : 70%;
+    overflow-y : auto;
+    text-align : center;
+    }
+    #login-form input[type="text"], #login-form input[type="password"], #login-form input[type="email"] {
+    width : 195%;
+    padding : 10px 15px;
+    font-size : 14px;
+    margin-bottom : 15px;
+    border-radius : 5px;
+    border : #ccc solid 1px;
+    margin-left: 40;
+    }
+    #submit {
+    padding : 10px 30px;
+    font-size : 11px;
+    width : 40%;
+    margin-left : 1;
+    margin-bottom : 10px;
+    border-radius : 8px;
+    border : none;
+    background-color : #FF0000;
+    color : white;
+    cursor : pointer;
+    }
+    #cancel {
+    padding : 10px 30px;
+    font-size : 11px;
+    width : 40%;
+    margin-left : 1;
+    margin-right : 1;
+    margin-bottom : 10px;
+    border-radius : 8px;
+    border : none;
+    background-color : #b3b3b3;
+    color : black;
+    cursor : pointer;
+    }
+    #submit:hover, #cancel:hover {
+    transform : scale(1.05);
+    }
+    .ua-logo {
+    max-width : 140%;
+    max-height : 90px;
+    margin-bottom : 5px;
+    }
+  header {
+      font-family: 'Roboto Condensed', Arial, sans-serif; 
+      font-size: 0.5px;
+      padding: 100px 1000px 1000px 1000px;
+      margin-right: 100px;
+      line-height: 25px;
+  }
+  
+  header h2 {
+      font-family: 'Roboto Condensed', Arial, sans-serif;
+      font-size: 0.1px;
+      line-height: 20px;
+      margin-right: 100px;
+      padding: 1px;
+  }
+  
+    .button-container {
+    gap : 0;
+    margin-top : 8px;
+    }
+    }
+    .chat-container {
+    overflow-y : auto;
+    display : flex;
+    flex-direction : column;
+    justify-content : space-between;
+    padding : 10px;
+    }
+    .chat-log {
+    max-height : calc(75vh - 50px);
+    overflow-y : auto;
+    padding-bottom : 60px;
+    }
+    .chat-message {
+    max-width : 80%;
+    margin-bottom : 15px;
+    padding : 12px;
+    border-radius : 8px;
+    background-color : #f1f1f1;
+    }
+  
+    @media screen and (min-width: 600px) and (max-width: 900px) {
+    .login-box {
+    width : 70%;
+    max-width : 400px;
+    }
+    #submit, #cancel {
+    font-size : 16px;
+    width : 70%;
+    }
+    }

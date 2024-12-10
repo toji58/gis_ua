@@ -14,8 +14,8 @@ const errorMessage = document.getElementById('error-message');
 
 const isChatPage = document.getElementById("chatPage") !== null;
 // Get the settings button and sidebar elements
-const settingsButton = document.getElementById("settingsButton");
-const settingsSidebar = document.getElementById("settingsSidebar");
+const menuButton = document.querySelector('.menu-button');
+const menuSidebar = document.querySelector('.menu-sidebar');
 
 // Firebase configuration and initialization
 const firebaseConfig = {
@@ -27,11 +27,16 @@ const firebaseConfig = {
     appId: "1:156890790642:web:9486ede5d79a2a9e252e6b",
     measurementId: "G-J5QCS3XZ21"
 };
-// Toggle settings sidebar visibility
-document.getElementById('settingsButton').addEventListener('click', function() {
-    const sidebar = document.getElementById('settingsSidebar');
-    sidebar.classList.toggle('open');
-});
+//const developmentMode = true; // Set to false to re-enable login
+
+//if (developmentMode) {
+    //chatContainer.style.display = 'block';
+    //loginContainer.style.display = 'none';
+    //}
+// Toggle the sidebar visibility
+menuButton.addEventListener('click', () => {
+    menuSidebar.classList.toggle('open');
+  });
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig); 
@@ -81,6 +86,8 @@ function handleSubmit(event) {
         });
 }
 
+let lastUserMessage = "";
+
 // Chat functionality
 const chatForm = document.getElementById('chat-form');
 chatForm.addEventListener('submit', handleChatSubmit);
@@ -100,27 +107,36 @@ function handleChatSubmit(event) {
 
 // Fetch response from Hugging Face
 async function fetchHuggingFaceResponse(userInput) {
+    const simpleResponses = {
+        "how are you": "I'm doing great, thank you for asking! How can I assist you today?",
+        "hello": "Hi there! How can I help you?",
+        "hi": "Hello! How can I assist you?",
+        "what is your name": "I am a generative AI assistant powered by Hugging Face!",
+        "who are you": "I'm an AI designed to assist with your queries."
+    };
+
+    const normalizedInput = userInput.toLowerCase().trim();
+    if (simpleResponses[normalizedInput]) {
+        return simpleResponses[normalizedInput];
+    }
+
     try {
-        const response = await fetch('https://api-inference.huggingface.co/models/gpt2', { // Use a real model like GPT-2
+        const response = await fetch('https://api-inference.huggingface.co/models/gpt2', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer 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`,  // Your actual Hugging Face API token
+                'Authorization': `Bearer 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`,  // Your actual Hugging Face API token
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                inputs: userInput,  // The model expects a field called 'inputs'
-            }),
+            body: JSON.stringify({ inputs: userInput }),
         });
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('Error Response:', errorText);  // Log the error message
-            throw new Error('Network response was not ok');
+            console.error('Error Response:', errorText); 
+            throw new Error(`Error: ${errorText}`);
         }
 
         const data = await response.json();
-        console.log('Response Data:', data);  // Debugging output
-
         return data[0]?.generated_text || "Sorry, I couldn't understand that.";
     } catch (error) {
         console.error('Error fetching Hugging Face response:', error);
@@ -130,76 +146,71 @@ async function fetchHuggingFaceResponse(userInput) {
 
 async function fetchInfo(userInput) {
     const normalizedInput = userInput.toLowerCase();
-    let responseMessage = "";
 
-    // Check for courses related query
-    if (normalizedInput.includes("courses")) {
-        fetchCourses();
+    // If the user is asking for courses and hasn't mentioned a department yet
+    if (normalizedInput.includes("courses") && lastUserMessage !== "askDepartment") {
+        displayMessage("Which department would you like to know the courses for? (e.g., CEA, CMS)", 'bot');
+        lastUserMessage = "askDepartment";
     }
-    // Check for general university info query
+    // If the user provides a department name
+    else if (lastUserMessage === "askDepartment") {
+        lastUserMessage = ""; // Reset after department input
+        fetchCourses(userInput);  // Fetch courses for the department entered by user
+    }
+    // Handle other queries, e.g., university info
     else if (normalizedInput.includes("university")) {
         fetchUniversityInfo("overview", "Sorry, I couldn't find that information.");
     }
-    // Otherwise, call Hugging Face API to get a response from a model
+    // Otherwise, call Hugging Face API for model-based response
     else {
-        responseMessage = await fetchHuggingFaceResponse(normalizedInput);
-        setTimeout(() => {
-            displayMessage(responseMessage, 'bot');
-        }, 1000);
+        const responseMessage = await fetchHuggingFaceResponse(normalizedInput);
+        displayMessage(responseMessage, 'bot');
     }
 }
 
 // Function to fetch courses for a given department
-function fetchCourses(departmentName) {
+async function fetchCourses(departmentName) {
     if (!departmentName || typeof departmentName !== 'string') {
         console.log("Invalid department name or empty string");
         displayMessage("Please specify a valid department.", 'bot');
         return;
     }
 
-    // Normalize department name to ensure case insensitivity
     const normalizedDepartmentName = departmentName.trim().toUpperCase();
     console.log("Fetching courses for department:", normalizedDepartmentName);
 
-    // Firestore reference for the dynamic department
     const departmentRef = doc(db, "departments", normalizedDepartmentName);
-    console.log("Firestore Reference: ", departmentRef);
+    try {
+        const docSnapshot = await getDoc(departmentRef);
 
-    // Fetch the document from Firestore
-    getDoc(departmentRef)
-        .then((docSnapshot) => {
-            if (docSnapshot.exists()) {
-                console.log(`Data for ${normalizedDepartmentName}:`, docSnapshot.data());
-                const departmentData = docSnapshot.data();
-                const coursesData = departmentData.courses || [];  // Get the courses array
+        if (docSnapshot.exists()) {
+            console.log(`Data for ${normalizedDepartmentName}:`, docSnapshot.data());
+            const departmentData = docSnapshot.data();
+            const coursesData = departmentData.courses || [];
 
-                if (coursesData.length > 0) {
-                    // Since the courses are in pairs (abbreviation, full name), we need to map them
-                    let coursesMessage = `Here are the courses offered in the ${normalizedDepartmentName} department:`;
-                    
-                    // Loop through the courses array (step 2 by 2)
-                    for (let i = 0; i < coursesData.length; i += 2) {
-                        const courseAbbreviation = coursesData[i];  // Course Abbreviation (even-indexed)
-                        const courseName = coursesData[i + 1];  // Course Name (odd-indexed)
-                        
-                        if (courseAbbreviation && courseName) {
-                            coursesMessage += `\n- ${courseAbbreviation}: ${courseName}`;
-                        }
+            if (coursesData.length > 0) {
+                let coursesMessage = `Here are the courses offered in the ${normalizedDepartmentName} department:`;
+
+                for (let i = 0; i < coursesData.length; i += 2) {
+                    const courseAbbreviation = coursesData[i];
+                    const courseName = coursesData[i + 1];
+
+                    if (courseAbbreviation && courseName) {
+                        coursesMessage += `\n- ${courseAbbreviation}: ${courseName}`;
                     }
-
-                    // Display the courses message
-                    displayMessage(coursesMessage, 'bot');
-                } else {
-                    displayMessage("Sorry, no courses are listed for the " + normalizedDepartmentName + " department.", 'bot');
                 }
+
+                displayMessage(coursesMessage, 'bot');
             } else {
-                displayMessage("Sorry, I couldn't retrieve the " + normalizedDepartmentName + " department's courses.", 'bot');
+                displayMessage("Sorry, no courses are listed for the " + normalizedDepartmentName + " department.", 'bot');
             }
-        })
-        .catch((error) => {
-            console.error("Error fetching courses:", error);
-            displayMessage("There was an error fetching the courses.", 'bot');
-        });
+        } else {
+            displayMessage("Sorry, I couldn't retrieve the " + normalizedDepartmentName + " department's courses.", 'bot');
+        }
+    } catch (error) {
+        console.error("Error fetching courses:", error);
+        displayMessage("There was an error fetching the courses.", 'bot');
+    }
 }
 
 function fetchUniversityInfo(key, responseMessage) {
