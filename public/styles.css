@@ -110,7 +110,18 @@
   border : rgb(255, 255, 255, 0.2) solid 1px;
   box-sizing : border-box;
   margin : auto;
+  position: relative;
   }
+
+  #errorMessage {
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    left: 0;
+    right: 0;
+    text-align: center; /* Center the text */
+    color: red; /* Example styling */
+    font-size: 1px; /* Adjust as needed */
+}
   .logo-section {
   display : flex;
   justify-content : center;
@@ -189,6 +200,7 @@
   box-sizing : border-box;
   overflow : visible;
   }
+  
   .chat-log {
   padding : 10px;
   border : #DDDDDD solid 1px;
@@ -238,6 +250,7 @@
   bottom : -15px;
   right : 5px;
   }
+  
   .user-message .message-timestamp {
   right : 10px;
   }
@@ -249,7 +262,7 @@
   display : flex;
   width : 100%;
   }
-/* Container for textarea and button */
+
 .textarea-container {
   display: flex;
   align-items: center;
@@ -257,7 +270,7 @@
   width: 100%;
 }
 
-/* Adjust textarea to leave space for button */
+
 form textarea {
   flex-grow: 1;
   padding: 8px 10px;
@@ -271,10 +284,9 @@ form textarea {
   height: 85px;
   line-height: 1.4;
   color: #333;
-  padding-right: 60px; /* Space for the button */
+  padding-right: 60px;
 }
 
-/* Style the send button */
 form .chat-send-button {
   position: absolute;
   right: 15px;
@@ -292,23 +304,21 @@ form .chat-send-button {
   transition: background-color 0.3s ease;
 }
 
-/* Hover effect for button */
+
 form .chat-send-button:hover {
-  background-color: #6B0000; /* Slightly darker red */
+  background-color: #6B0000; 
 }
 
-/* Arrow icon inside the button */
 form .chat-send-button .send-icon {
   width: 0;
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 15px solid white; /* White arrow pointing up */
+  border-bottom: 15px solid white; 
 }
 
-/* Optional: Adjust arrow position slightly */
 form .chat-send-button .send-icon {
-  transform: translateY(-2px); /* Fine-tune vertical alignment */
+  transform: translateY(-2px); 
 }
 
   #back-btn {
