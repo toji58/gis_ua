@@ -126,7 +126,9 @@ async function fetchFirestoreResponse(userInput) {
 }
 
 async function fetchInfo(userInput) {
-    const normalizedInput = normalizeInput(userInput);  // Normalize the input
+    const normalizedInput = normalizeInput(userInput);  // Normalize the inpu
+
+    console.log("user Input: ", normalizedInput);
 
     // Firestore query mappings
     const queryMapping = {
