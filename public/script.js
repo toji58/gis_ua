@@ -88,6 +88,8 @@ function handleChatSubmit(event) {
     event.preventDefault();
     const userInput = document.getElementById('input').value.trim();
 
+    console.log("userInput: ", userInput);
+
     if (userInput.length === 0) {
         return; // Don't send an empty message
     }
