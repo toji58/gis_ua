@@ -536,6 +536,10 @@ if (normalizedInput.includes("history of university of antique")) {
     return await handleQuery(userInput);  // Fetch history from Firestore
 }
 
+if (normalizedInput.includes("location")){
+    return await getSpecificBuildingLocation(userInput);
+}
+    
 return "I don’t have an answer for that yet.";
 }
 
