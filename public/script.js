@@ -695,48 +695,71 @@ async function getSpecificBuildingLocation(userInput) {
             "cas": "college_of_arts_and_sciences",
             "cit": "college_of_industrial_technology",
             "cte": "college_of_teacher_education",
-            "college of computer studies": "college_of_computer_studies",
-            "college of engineering and architecture": "college_of_engineering_and_architecture",
-            "college of criminal justice and education": "college_of_criminal_justice_and_education",
-            "college of maritime studies": "college_of_maritime_studies",
-            "college of business and accountancy": "college_of_business_and_accountancy",
-            "college of arts and sciences": "college_of_arts_and_sciences",
-            "college of industrial technology": "college_of_industrial_technology",
-            "college of teacher education": "college_of_teacher_education"
+            "ccs dean's office": "ccs_dean's_office",
+            "cea dean's office": "cea_dean's_office",
+            "ccje dean's office": "ccje_dean's_office",
+            "cms dean's office": "cms_dean's_office",
+            "cba dean's office": "cba_dean's_office",
+            "cas dean's office": "cas_dean's_office",
+            "cit dean's office": "cit_dean's_office",
+            "cte dean's office": "cte_dean's_office",
+            "office of the vice president for academic affairs": "office_of_the_vice_president_for_academic_affairs",
+            "office of the vice president for administration and finance": "office_of_the_vice_president_for_administration_and_finance",
+            "office of the vice president for research extension and innovation": "office_of_the_vice_president_for_research_extension_and_innovation",
+            "president office": "president_office",
+            "sas office": "sas_office"
         };
 
         // Normalize user input (case-insensitive and trim whitespace)
-        const normalizedInput = userInput.trim().toLowerCase();
+        let normalizedInput = userInput.trim().toLowerCase();
 
-        // Extract potential college name or abbreviation
-        const inputWords = normalizedInput.split(/\s+/); // Split input into words
-        let matchedKey = null;
+        // Replace input with the corresponding mapped value if it exists
+        if (collegeMapping[normalizedInput]) {
+            normalizedInput = collegeMapping[normalizedInput];
+        }
 
-        for (const word of inputWords) {
-            if (collegeMapping[word]) {
-                matchedKey = collegeMapping[word];
-                break; // Stop once we find the first match
+        // Define an array of Firestore collection names to search
+        const collectionsToSearch = [
+            "building_locations",
+            "faculty_locations",
+            "office_locations",
+        ];
+
+        // Initialize a variable to store the matched response
+        let matchedResponse = null;
+
+        // Loop through each collection and search for a match
+        for (const collectionName of collectionsToSearch) {
+            const collectionRef = collection(db, collectionName);
+            const querySnapshot = await getDocs(collectionRef);
+
+            querySnapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+
+                // Match normalized input with document ID or specific field (e.g., "name")
+                if (
+                    docSnap.id.toLowerCase() === normalizedInput ||
+                    (data.name && data.name.toLowerCase() === normalizedInput)
+                ) {
+                    matchedResponse = data.detailed_response || "Detailed location information is not available.";
+                }
+            });
+
+            // Break the loop if a match is found
+            if (matchedResponse) {
+                break;
             }
         }
 
-        if (!matchedKey) {
-            return "Sorry, the college name or abbreviation in your input is not recognized.";
-        }
-
-        // Query Firestore for the college document
-        const docRef = doc(db, "building_locations", matchedKey);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data();
-            // Return only the detailed response
-            return data.detailed_response || "Sorry, no detailed location information found.";
+        // If a match is found, return it; otherwise, return a fallback message
+        if (matchedResponse) {
+            return matchedResponse;
         } else {
-            return "Sorry, no location data found for that college.";
+            return "Sorry, I couldn't find location information for your input. Please try again.";
         }
     } catch (error) {
         console.error("Error retrieving location:", error);
-        return "Sorry, I couldn't retrieve the location for that college.";
+        return "Sorry, an error occurred while retrieving the location information.";
     }
 }
 
