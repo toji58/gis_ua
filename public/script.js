@@ -140,7 +140,9 @@ async function fetchInfo(userInput) {
         "what was the original name of the university of antique": "originalName",
         "what is the vision of ua": "vision",
         "what is the vision of university of antique": "vision",
-        "what is the vision of the university of antique": "vision"
+        "what is the vision of the university of antique": "vision",
+        "who is the president of ua": "president",
+        "who is the president of university of antique": "president"
     };
 
     async function handleQuery(query) {
@@ -329,6 +331,65 @@ async function fetchUAHistory() {
     }
 }
 
+async function getEnrollmentProcedures() {
+    try {
+        const docRef = doc(db, "procedures", "freshmen"); // Reference to Firestore document
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.steps && Array.isArray(data.steps)) {
+                const formattedSteps = data.steps.map(step => {
+                    let stepDetails = `<strong>Step ${step.step_number}: ${step.title}</strong><br>`;
+
+                    // Add the step details if they exist
+                    if (step.details) {
+                        stepDetails += `<strong>Details:</strong> ${step.details}<br>`;
+                    }
+
+                    // Add payment methods if they exist
+                    if (step.payment_methods) {
+                        stepDetails += `<strong>Payment Methods:</strong><ul>`;
+                        Object.values(step.payment_methods).forEach(method => {
+                            stepDetails += `<li>${method.name} (Method: ${method.method}, Contact: ${method.number})</li>`;
+                        });
+                        stepDetails += `</ul>`;
+                    }
+
+                    // Add fees if they exist
+                    if (step.fees) {
+                        stepDetails += `<strong>Fees:</strong><ul>`;
+                        Object.entries(step.fees).forEach(([key, fee]) => {
+                            stepDetails += `<li>${key}: ${fee}</li>`;
+                        });
+                        stepDetails += `</ul>`;
+                    }
+
+                    // Add additional notes if available
+                    if (step.additional_notes) {
+                        stepDetails += `<strong>Additional Notes:</strong> ${step.additional_notes}<br>`;
+                    }
+
+                    return stepDetails; // Return the formatted details for each step
+                });
+
+                return formattedSteps.join('<hr>'); // Join the steps with a horizontal line for separation
+            } else {
+                console.warn("Steps data is missing or not an array.");
+                return [];
+            }
+        } else {
+            console.warn("No such document found in Firestore.");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching enrollment procedures:", error);
+        return [];
+    }
+}
+
+
+
 // Example usage: Fetch UA history and log the result
 fetchUAHistory().then(response => {
     console.log("Title: ", response.title);  // This will log the title property
@@ -346,6 +407,22 @@ if (normalizedInput.includes("freshmen") || normalizedInput.includes("shiftees")
     }
 }
 
+if (normalizedInput.includes("colleges") && normalizedInput.includes("university")) {
+    try {
+        const collegeNames = await getCollegesNames();  // Await the async function to get college names
+
+        // Check if there are any college names and format the response
+        if (collegeNames.length > 0) {
+            return `The colleges offered by the University of Antique are: ${collegeNames.join(", ")}.`;
+        } else {
+            return "Sorry, no colleges found.";
+        }
+    } catch (error) {
+        console.error("Error fetching college names:", error);
+        return "Sorry, I couldn't fetch the college names at the moment.";  // Graceful error handling
+    }
+}
+
 if (normalizedInput.includes("history") || 
     normalizedInput.includes("beginnings") ||  
     normalizedInput.includes("establishment")) {
@@ -354,6 +431,19 @@ if (normalizedInput.includes("history") ||
     
     // Return a formatted string with both the title and content of history
     return `${uaHistory.title}\n\n${uaHistory.content}`;
+}
+
+// [NEW CODE]: Handling Enrollment Steps based on the query
+if (["registration", "register", "enroll", "enrol"].some(keyword => normalizedInput.includes(keyword))) {
+    return await getEnrollmentProcedures("step_1_registration"); // Add this line to fetch the registration step
+} else if (normalizedInput.includes("appraisal")) {
+    return await getEnrollmentProcedures("step_2_appraisal_and_advising"); // Add this line for appraisal step
+} else if (normalizedInput.includes("assessment")) {
+    return await getEnrollmentProcedures("step_3_assessment_and_fees"); // Add this line for assessment step
+} else if (normalizedInput.includes("confirmation")) {
+    return await getEnrollmentProcedures("step_4_confirmation_of_enrollment"); // Add this line for confirmation step
+} else if (normalizedInput.includes("lms")) {
+    return await getEnrollmentProcedures("step_5_access_to_lms"); // Add this line for LMS step
 }
 
 
@@ -369,14 +459,6 @@ if (normalizedInput.includes("registration")) {
     return await getEnrollmentProcess("step_5_access_to_lms");
 }
 
-
-// Check if the query is related to courses or programs
-if (normalizedInput.includes("courses") || normalizedInput.includes("programs")) {
-    const collegeAbbr = Object.keys(collegeAbbreviations).find(abbr => normalizedInput.includes(abbr));
-    if (collegeAbbr) {
-        return await getCollegePrograms(collegeAbbr, collegeAbbreviations);
-    }
-}
 
 // Check if the query is related to events (e.g., Hugyaw, Paskua, UA Foundation Day)
 if (normalizedInput.includes("hugyaw") || normalizedInput.includes("paskua") || normalizedInput.includes("university of antique foundation day")) {
@@ -416,6 +498,39 @@ for (let query in queryMapping) {if (normalizedInput.includes("courses") || norm
     }
 }
 
+async function handleQuery(query) {
+    const normalizedQuery = query.toLowerCase();
+
+    // Check if the query contains keywords to match any office (for example: VPPA, President's Office)
+    let officeId = '';
+
+    if (normalizedQuery.includes("vice president for academic affairs") || normalizedQuery.includes("vppa")) {
+        officeId = "office_of_the_vice_president_for_academic_affairs";
+    }
+    // Add more conditional checks for other offices if necessary
+    else {
+        console.log("I don't have an answer for that yet.");
+        return;
+    }
+
+    // Fetch office details from Firestore
+    await getOfficeLocation(officeId);
+}
+
+async function getOfficeLocation(officeId) {
+    const docRef = doc(db, "office_locations", officeId);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log("Office Name: ", data.name);
+        console.log("Details: ", data.detailed_response);
+    } else {
+        console.log("No such document!");
+    }
+}
+
+
 // If no matching query is found, handle history-specific query
 if (normalizedInput.includes("history of university of antique")) {
     return await handleQuery(userInput);  // Fetch history from Firestore
@@ -424,12 +539,63 @@ if (normalizedInput.includes("history of university of antique")) {
 return "I don’t have an answer for that yet.";
 }
 
+// Mapping for abbreviations & full names
+const collegeMapping = {
+    "ccs": "college_of_computer_studies",
+    "cea": "college_of_engineering_and_architecture",
+    "ccje": "college_of_criminal_justice_and_education",
+    "cms": "college_of_maritime_studies",
+    "cba": "college_of_business_and_accountancy",
+    "cas": "college_of_arts_and_sciences",
+    "cit": "college_of_industrial_technology",
+    "cte": "college_of_teacher_education",
+    "college of computer studies": "college_of_computer_studies",
+    "college of engineering and architecture": "college_of_engineering_and_architecture",
+    "college of criminal justice and education": "college_of_criminal_justice_and_education",
+    "college of maritime studies": "college_of_maritime_studies",
+    "college of business and accountancy": "college_of_business_and_accountancy",
+    "college of arts and sciences": "college_of_arts_and_sciences",
+    "college of industrial technology": "college_of_industrial_technology",
+    "college of teacher education": "college_of_teacher_education"
+};
+
+// Function to fetch building location
+async function getBuildingLocation(normalizedInputLower) {
+    if (normalizedInputLower.includes("location")) {
+        // Find matching college key
+        const matchedKey = Object.keys(collegeMapping).find(key =>
+            normalizedInputLower.includes(key)
+        );
+
+        if (matchedKey) {
+            const collegeId = collegeMapping[matchedKey];
+
+            try {
+                // Query Firestore for the correct document
+                const docRef = doc(db, "building_locations", collegeId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    return docSnap.data().detailed_response || "Location details not available.";
+                } else {
+                    return `Sorry, no location data found for ${matchedKey}.`;
+                }
+            } catch (error) {
+                console.error("Error retrieving location:", error);
+                return "Sorry, I couldn't retrieve the location information for that college.";
+            }
+        } else {
+            return "Please specify a valid college to get the building location.";
+        }
+    }
+}
+
 // Mapping of abbreviations to full college names
 const collegeAbbreviations = {
     "ccs": "College of Computer Studies",
     "cea": "College of Engineering and Architecture",
     "ccje": "College of Criminal Justice Education",
-    "cms": "College of Management and Social Sciences",
+    "cms": "College of Maritime Studies",
     "cba": "College of Business Administration",
     "cas": "College of Arts and Sciences",
     "cit": "College of Industrial Technology",
@@ -437,7 +603,7 @@ const collegeAbbreviations = {
     "college of computer studies": "ccs", 
     "college of engineering and architecture": "cea", 
     "college of criminal justice education": "ccje", 
-    "college of management and social sciences": "cms", 
+    "College of Maritime Studies": "cms", 
     "college of business administration": "cba",
     "college of arts and sciences": "cas", 
     "college of industrial technology": "cit", 
@@ -500,6 +666,61 @@ async function getCollegePrograms(collegeAbbr, collegeAbbreviations) {
         return `Error fetching the programs for ${fullCollegeName}.`;
     }
 }
+
+async function getCollegesNames() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "colleges"));
+        const collegeNames = [];
+        
+        querySnapshot.forEach(doc => {
+            const collegeData = doc.data();
+            const collegeName = collegeData.name;  // Assuming the field holding the full name is 'name'
+            if (collegeName) {
+                collegeNames.push(collegeName); // Add full college name to the array
+            }
+        });
+        
+        return collegeNames;
+    } catch (error) {
+        console.error("Error fetching college names:", error);
+        throw new Error("Unable to fetch college names.");
+    }
+}
+
+async function getSpecificBuildingLocation(collegeName) {
+    try {
+        // Ensure Firestore key format (convert spaces to underscores & lowercase)
+        const normalizedCollegeName = collegeName.toLowerCase().replace(/\s+/g, "_");
+
+        // Query Firestore for the college document
+        const docRef = doc(db, "building_locations", normalizedCollegeName);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            // Return only the detailed response
+            return data.detailed_response || "Sorry, no detailed location information found.";
+        } else {
+            return "Sorry, no location data found for that college.";
+        }
+    } catch (error) {
+        console.error("Error retrieving location:", error);
+        return "Sorry, I couldn't retrieve the location for that college.";
+    }
+}
+
+async function addOfficeLocation(officeId, name, detailedResponse) {
+    try {
+        await setDoc(doc(db, "office_locations", officeId), {
+            name: name,
+            detailed_response: detailedResponse
+        });
+        console.log(`${officeId} added successfully`);
+    } catch (error) {
+        console.error("Error adding document: ", error);
+    }
+}
+
 
 // Display the message on the chat interface
 function displayMessage(message, sender) {
