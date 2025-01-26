@@ -515,13 +515,10 @@ for (let query in queryMapping) {if (normalizedInput.includes("courses") || norm
     }
 }
 
-<<<<<<< Updated upstream
-async function handleQuery(query) {
-    console.log("Query to get location received");
-=======
+
+
 async function fetchInfo(query) {
     // Ensure the query is normalized to lowercase
->>>>>>> Stashed changes
     const normalizedQuery = query.toLowerCase();
     console.log("Normalized Query:", normalizedQuery);  // Log the query for debugging
 
