@@ -515,14 +515,24 @@ for (let query in queryMapping) {if (normalizedInput.includes("courses") || norm
     }
 }
 
+<<<<<<< Updated upstream
 async function handleQuery(query) {
     console.log("Query to get location received");
+=======
+async function fetchInfo(query) {
+    // Ensure the query is normalized to lowercase
+>>>>>>> Stashed changes
     const normalizedQuery = query.toLowerCase();
+    console.log("Normalized Query:", normalizedQuery);  // Log the query for debugging
 
-    // Check if the query contains keywords to match any office (for example: VPPA, President's Office)
+    // Add the office matching logic here
     let officeId = '';
 
-    if (normalizedQuery.includes("vice president for academic affairs") || normalizedQuery.includes("vppa")) {
+    // Adding more flexible matching for the query
+    if (normalizedQuery.includes("vice president for academic affairs") || 
+        normalizedQuery.includes("vppa") || 
+        normalizedQuery.includes("academic affairs office") || 
+        normalizedQuery.includes("office of vppa")) {
         officeId = "office_of_the_vice_president_for_academic_affairs";
     }
 
@@ -535,20 +545,13 @@ async function handleQuery(query) {
         return;
     }
 
-    // Fetch office details from Firestore
-    await getOfficeLocation(officeId);
-}
-
-async function getOfficeLocation(officeId) {
-    const docRef = doc(db, "office_locations", officeId);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-        const data = docSnap.data();
-        console.log("Office Name: ", data.name);
-        console.log("Details: ", data.detailed_response);
+    // Fetch office details from Firestore and handle result
+    const officeData = await getOfficeLocation(officeId);
+    if (officeData) {
+        console.log("Office Name: ", officeData.name);
+        console.log("Details: ", officeData.detailed_response);
     } else {
-        console.log("No such document!");
+        console.log("No data available for the office.");
     }
 }
 
@@ -564,6 +567,7 @@ if (normalizedInput.includes("location")){
     
 return "I don’t have an answer for that yet.";
 }
+
 
 // Mapping for abbreviations & full names
 const collegeMapping = {
@@ -584,37 +588,6 @@ const collegeMapping = {
     "college of industrial technology": "college_of_industrial_technology",
     "college of teacher education": "college_of_teacher_education"
 };
-
-// Function to fetch building location
-async function getBuildingLocation(normalizedInputLower) {
-    if (normalizedInputLower.includes("location")) {
-        // Find matching college key
-        const matchedKey = Object.keys(collegeMapping).find(key =>
-            normalizedInputLower.includes(key)
-        );
-
-        if (matchedKey) {
-            const collegeId = collegeMapping[matchedKey];
-
-            try {
-                // Query Firestore for the correct document
-                const docRef = doc(db, "building_locations", collegeId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    return docSnap.data().detailed_response || "Location details not available.";
-                } else {
-                    return `Sorry, no location data found for ${matchedKey}.`;
-                }
-            } catch (error) {
-                console.error("Error retrieving location:", error);
-                return "Sorry, I couldn't retrieve the location information for that college.";
-            }
-        } else {
-            return "Please specify a valid college to get the building location.";
-        }
-    }
-}
 
 // Mapping of abbreviations to full college names
 const collegeAbbreviations = {
@@ -735,18 +708,16 @@ async function getSpecificBuildingLocation(collegeName) {
     }
 }
 
-async function addOfficeLocation(officeId, name, detailedResponse) {
-    try {
-        await setDoc(doc(db, "office_locations", officeId), {
-            name: name,
-            detailed_response: detailedResponse
-        });
-        console.log(`${officeId} added successfully`);
-    } catch (error) {
-        console.error("Error adding document: ", error);
+async function getOfficeLocation(officeId) {
+    const docRef = doc(db, "office_locations", officeId);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+        return docSnap.data();  // Return the office data
+    } else {
+        return null;  // If the document doesn't exist
     }
 }
-
 
 // Display the message on the chat interface
 function displayMessage(message, sender) {
