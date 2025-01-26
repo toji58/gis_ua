@@ -689,7 +689,8 @@ async function getCollegesNames() {
 async function getSpecificBuildingLocation(collegeName) {
     try {
         // Ensure Firestore key format (convert spaces to underscores & lowercase)
-        const normalizedCollegeName = collegeName.toLowerCase().replace(/\s+/g, "_");
+        // const normalizedCollegeName = collegeName.toLowerCase().replace(/\s+/g, "_");
+        const normalizedCollegeName = "college_of_computer_studies";
 
         // Query Firestore for the college document
         const docRef = doc(db, "building_locations", normalizedCollegeName);
