@@ -558,7 +558,7 @@ if (normalizedInput.includes("history of university of antique")) {
     return await handleQuery(userInput);  // Fetch history from Firestore
 }
 
-if (normalizedInput.includes("location") || normalizedInput.includes("located")){
+if (normalizedInput.includes("location") || normalizedInput.includes("located") || normalizedInput.includes("where")){
     return await getSpecificBuildingLocation(userInput);
 }
     
@@ -703,6 +703,11 @@ async function getSpecificBuildingLocation(userInput) {
             "industrial": "college_of_industrial_technology",
             "cte": "college_of_teacher_education",
             "teacher": "college_of_teacher_education",
+            "academic": "office_of_the_vice_president_for_academic_affairs",
+            "administration": "office_of_the_vice_president_for_administration_and_finance",
+            "research": "office_of_the_vice_president_for_research_extension_and_innovation",
+            "president": "president_office",
+            "sas": "sas_office"
         };
 
         // Dean's office mapping
@@ -715,6 +720,14 @@ async function getSpecificBuildingLocation(userInput) {
             "cas": "cas_dean's_office",
             "cit": "cit_dean's_office",
             "cte": "cte_dean's_office",
+            "computer": "ccs_dean's_office",
+            "engineering": "cea_dean's_office",
+            "criminal": "ccje_dean's_office",
+            "maritime": "cms_dean's_office",
+            "business": "cba_dean's_office",
+            "arts": "cas_dean's_office",
+            "industrial": "cit_dean's_office",
+            "teacher": "cte_dean's_office",
         };
 
         // Normalize user input (case-insensitive and trim whitespace)
