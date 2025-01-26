@@ -685,48 +685,65 @@ async function getCollegesNames() {
 
 async function getSpecificBuildingLocation(userInput) {
     try {
-        // College mapping for user-friendly inputs
+        // College mapping for abbreviations and full names
         const collegeMapping = {
             "ccs": "college_of_computer_studies",
+            "computer": "college_of_computer_studies",
             "cea": "college_of_engineering_and_architecture",
+            "engineering": "college_of_engineering_and_architecture",
             "ccje": "college_of_criminal_justice_and_education",
+            "criminal": "college_of_criminal_justice_and_education",
             "cms": "college_of_maritime_studies",
+            "maritime": "college_of_maritime_studies",
             "cba": "college_of_business_and_accountancy",
+            "business": "college_of_business_and_accountancy",
             "cas": "college_of_arts_and_sciences",
+            "arts": "college_of_arts_and_sciences",
             "cit": "college_of_industrial_technology",
+            "industrial": "college_of_industrial_technology",
             "cte": "college_of_teacher_education",
-            "ccs dean's office": "ccs_dean's_office",
-            "cea dean's office": "cea_dean's_office",
-            "ccje dean's office": "ccje_dean's_office",
-            "cms dean's office": "cms_dean's_office",
-            "cba dean's office": "cba_dean's_office",
-            "cas dean's office": "cas_dean's_office",
-            "cit dean's office": "cit_dean's_office",
-            "cte dean's office": "cte_dean's_office",
-            "office of the vice president for academic affairs": "office_of_the_vice_president_for_academic_affairs",
-            "office of the vice president for administration and finance": "office_of_the_vice_president_for_administration_and_finance",
-            "office of the vice president for research extension and innovation": "office_of_the_vice_president_for_research_extension_and_innovation",
-            "president office": "president_office",
-            "sas office": "sas_office"
+            "teacher": "college_of_teacher_education",
+        };
+
+        // Dean's office mapping
+        const deanMapping = {
+            "ccs": "ccs_dean's_office",
+            "cea": "cea_dean's_office",
+            "ccje": "ccje_dean's_office",
+            "cms": "cms_dean's_office",
+            "cba": "cba_dean's_office",
+            "cas": "cas_dean's_office",
+            "cit": "cit_dean's_office",
+            "cte": "cte_dean's_office",
         };
 
         // Normalize user input (case-insensitive and trim whitespace)
-        let normalizedInput = userInput.trim().toLowerCase();
+        const normalizedInput = userInput.trim().toLowerCase();
 
-        // Remove extra words like "location" or "where is"
-        const cleanedInput = normalizedInput.replace(/\blocation\b|\bwhere is\b|\bwhere\b|\bat\b/, "").trim();
+        // Remove extra words like "location", "where is", etc.
+        const cleanedInput = normalizedInput.replace(/\b(location|where is|where|at)\b/g, "").trim();
 
         // Split the cleaned input into words
-        const inputWords = cleanedInput.split(/\s+/); // Split input into words
+        const inputWords = cleanedInput.split(/\s+/);
 
-        // Try to match each word with the college mapping
-        let matchedKey = null;
-
-        for (const word of inputWords) {
-            if (collegeMapping[word]) {
-                matchedKey = collegeMapping[word];
-                break; // Stop once we find the first match
+        // Helper function to find a match in the mappings
+        const findMatchInMapping = (mapping) => {
+            for (const word of inputWords) {
+                if (mapping[word]) {
+                    return mapping[word];
+                }
             }
+            return null;
+        };
+
+        // Determine if input refers to a dean's office or a college
+        const isDeanOffice = inputWords.includes("dean");
+        let matchedKey;
+
+        if (isDeanOffice) {
+            matchedKey = findMatchInMapping(deanMapping);
+        } else {
+            matchedKey = findMatchInMapping(collegeMapping);
         }
 
         // If a match is found, search the collections
