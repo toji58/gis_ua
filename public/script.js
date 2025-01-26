@@ -315,6 +315,8 @@ async function getEnrollmentProcess(step) {
 async function fetchUAHistory() {
     // Reference to the "UA_History" document in the "university_info" collection
     const historyRef = doc(db, "university_info", "UA_History");
+
+    console.log("thi sis the starting point line 319");
     
     try {
         // Fetch the document snapshot
