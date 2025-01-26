@@ -499,12 +499,17 @@ for (let query in queryMapping) {if (normalizedInput.includes("courses") || norm
 }
 
 async function handleQuery(query) {
+    console.log("Query to get location received");
     const normalizedQuery = query.toLowerCase();
 
     // Check if the query contains keywords to match any office (for example: VPPA, President's Office)
     let officeId = '';
 
     if (normalizedQuery.includes("vice president for academic affairs") || normalizedQuery.includes("vppa")) {
+        officeId = "office_of_the_vice_president_for_academic_affairs";
+    }
+
+    if (normalizedQuery.includes("ccs location") || normalizedQuery.includes("vppa")) {
         officeId = "office_of_the_vice_president_for_academic_affairs";
     }
     // Add more conditional checks for other offices if necessary
