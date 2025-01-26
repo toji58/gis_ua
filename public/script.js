@@ -413,6 +413,15 @@ if (normalizedInput.includes("freshmen") || normalizedInput.includes("shiftees")
     }
 }
 
+if (normalizedInput.includes("location")) {
+    // const serviceAbbr = Object.keys(serviceAbbreviations).find(abbr => normalizedInput.includes(abbr));
+    // if (serviceAbbr) {
+    //     const serviceType = serviceAbbreviations[serviceAbbr]; // Get the Firestore document name for the service
+    //     return await getServiceDetails(serviceType); // Fetch service details from Firestore
+    // }
+    console.log("fteching location");
+}
+
 if (normalizedInput.includes("colleges") && normalizedInput.includes("university")) {
     try {
         const collegeNames = await getCollegesNames();  // Await the async function to get college names
