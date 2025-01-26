@@ -686,14 +686,48 @@ async function getCollegesNames() {
     }
 }
 
-async function getSpecificBuildingLocation(collegeName) {
+async function getSpecificBuildingLocation(userInput) {
     try {
-        // Ensure Firestore key format (convert spaces to underscores & lowercase)
-        // const normalizedCollegeName = collegeName.toLowerCase().replace(/\s+/g, "_");
-        const normalizedCollegeName = "college_of_computer_studies";
+        // College mapping for user-friendly inputs
+        const collegeMapping = {
+            "ccs": "college_of_computer_studies",
+            "cea": "college_of_engineering_and_architecture",
+            "ccje": "college_of_criminal_justice_and_education",
+            "cms": "college_of_maritime_studies",
+            "cba": "college_of_business_and_accountancy",
+            "cas": "college_of_arts_and_sciences",
+            "cit": "college_of_industrial_technology",
+            "cte": "college_of_teacher_education",
+            "college of computer studies": "college_of_computer_studies",
+            "college of engineering and architecture": "college_of_engineering_and_architecture",
+            "college of criminal justice and education": "college_of_criminal_justice_and_education",
+            "college of maritime studies": "college_of_maritime_studies",
+            "college of business and accountancy": "college_of_business_and_accountancy",
+            "college of arts and sciences": "college_of_arts_and_sciences",
+            "college of industrial technology": "college_of_industrial_technology",
+            "college of teacher education": "college_of_teacher_education"
+        };
+
+        // Normalize user input (case-insensitive and trim whitespace)
+        const normalizedInput = userInput.trim().toLowerCase();
+
+        // Extract potential college name or abbreviation
+        const inputWords = normalizedInput.split(/\s+/); // Split input into words
+        let matchedKey = null;
+
+        for (const word of inputWords) {
+            if (collegeMapping[word]) {
+                matchedKey = collegeMapping[word];
+                break; // Stop once we find the first match
+            }
+        }
+
+        if (!matchedKey) {
+            return "Sorry, the college name or abbreviation in your input is not recognized.";
+        }
 
         // Query Firestore for the college document
-        const docRef = doc(db, "building_locations", normalizedCollegeName);
+        const docRef = doc(db, "building_locations", matchedKey);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -708,6 +742,7 @@ async function getSpecificBuildingLocation(collegeName) {
         return "Sorry, I couldn't retrieve the location for that college.";
     }
 }
+
 
 async function getOfficeLocation(officeId) {
     const docRef = doc(db, "office_locations", officeId);
