@@ -713,55 +713,69 @@ async function getSpecificBuildingLocation(userInput) {
         // Normalize user input (case-insensitive and trim whitespace)
         let normalizedInput = userInput.trim().toLowerCase();
 
-        // Replace input with the corresponding mapped value if it exists
-        if (collegeMapping[normalizedInput]) {
-            normalizedInput = collegeMapping[normalizedInput];
-        }
+        // Remove extra words like "location" or "where is"
+        const cleanedInput = normalizedInput.replace(/\blocation\b|\bwhere is\b|\bwhere\b|\bat\b/, "").trim();
 
-        // Define an array of Firestore collection names to search
-        const collectionsToSearch = [
-            "building_locations",
-            "faculty_locations",
-            "office_locations",
-        ];
+        // Split the cleaned input into words
+        const inputWords = cleanedInput.split(/\s+/); // Split input into words
 
-        // Initialize a variable to store the matched response
-        let matchedResponse = null;
+        // Try to match each word with the college mapping
+        let matchedKey = null;
 
-        // Loop through each collection and search for a match
-        for (const collectionName of collectionsToSearch) {
-            const collectionRef = collection(db, collectionName);
-            const querySnapshot = await getDocs(collectionRef);
-
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-
-                // Match normalized input with document ID or specific field (e.g., "name")
-                if (
-                    docSnap.id.toLowerCase() === normalizedInput ||
-                    (data.name && data.name.toLowerCase() === normalizedInput)
-                ) {
-                    matchedResponse = data.detailed_response || "Detailed location information is not available.";
-                }
-            });
-
-            // Break the loop if a match is found
-            if (matchedResponse) {
-                break;
+        for (const word of inputWords) {
+            if (collegeMapping[word]) {
+                matchedKey = collegeMapping[word];
+                break; // Stop once we find the first match
             }
         }
 
-        // If a match is found, return it; otherwise, return a fallback message
-        if (matchedResponse) {
-            return matchedResponse;
+        // If a match is found, search the collections
+        if (matchedKey) {
+            const collectionsToSearch = [
+                "building_locations",
+                "faculty_locations",
+                "office_locations",
+            ];
+
+            let matchedResponse = null;
+
+            for (const collectionName of collectionsToSearch) {
+                const collectionRef = collection(db, collectionName);
+                const querySnapshot = await getDocs(collectionRef);
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+
+                    // Match document ID or name with the normalized input
+                    if (
+                        docSnap.id.toLowerCase() === matchedKey ||
+                        (data.name && data.name.toLowerCase() === matchedKey)
+                    ) {
+                        matchedResponse = data.detailed_response || "Detailed location information is not available.";
+                    }
+                });
+
+                // Break the loop if a match is found
+                if (matchedResponse) {
+                    break;
+                }
+            }
+
+            // If a match is found, return it; otherwise, return a fallback message
+            if (matchedResponse) {
+                return matchedResponse;
+            } else {
+                return "Sorry, I couldn't find location information for your input. Please try again.";
+            }
         } else {
-            return "Sorry, I couldn't find location information for your input. Please try again.";
+            return "Sorry, no matching college or office found in your input.";
         }
     } catch (error) {
         console.error("Error retrieving location:", error);
         return "Sorry, an error occurred while retrieving the location information.";
     }
 }
+
 
 
 async function getOfficeLocation(officeId) {
