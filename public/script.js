@@ -432,6 +432,8 @@ if (normalizedInput.includes("colleges") && normalizedInput.includes("university
 if (normalizedInput.includes("history") || 
     normalizedInput.includes("beginnings") ||  
     normalizedInput.includes("establishment")) {
+
+    console.log("this is the starting point line 435");
     
     const uaHistory = await fetchUAHistory(); // Fetch UA History details
     
